@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package programacion1.twitter_clone;
+import java.sql.SQLException;
 
 /**
  *
@@ -41,6 +42,11 @@ public class Login extends javax.swing.JFrame {
         jPasswordField1.setText("jPasswordField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         Login_Label.setText("Login/Register");
 
@@ -137,11 +143,19 @@ public class Login extends javax.swing.JFrame {
         UserData user = new UserData();
         user.Username = UserTxtField.getText();
         user.Password = String.valueOf(PasswordTxtField.getPassword());
-        if (user.verify()){
+        user.getData();
+        if (user.verify() && !user.active()){
             MessageLabel.setText("Welcome " + user.Username);
-            new Main_Window_Twitt().setVisible(true);
+            user.connect();
+            try{
+                new Main_Window_Twitt().setVisible(true);
+            }catch (SQLException ex){
+                ex.printStackTrace();
+            }
             this.dispose();
-        } else {
+        }else if(user.active()){
+            MessageLabel.setText("User already Connected!!");
+        }else{
             MessageLabel.setText("Username Or Password incorrect!");
         }
     }//GEN-LAST:event_LoginBtnMouseClicked
@@ -156,6 +170,8 @@ public class Login extends javax.swing.JFrame {
             UserTxtField.setText("");
             PasswordTxtField.setText("");
             MessageLabel.setText("Registered Succesfully");
+            user.connect();
+            user.disconnect();
         } else {
             MessageLabel.setText("Username already exists");
         }
@@ -169,6 +185,10 @@ public class Login extends javax.swing.JFrame {
         PasswordTxtField.setText("");
         MessageLabel.setText("Registered Succesfully");*/
     }//GEN-LAST:event_RegisterBtnMouseClicked
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

@@ -12,4 +12,10 @@ public interface ICRUD {
     public void register();
     public boolean verify();
     public boolean verify_user();
+    public void connect();
+    public void disconnect();
+    public void disconnect_log();
+    public void getData();
+    public void getLogData();
+    public boolean active();
 }
