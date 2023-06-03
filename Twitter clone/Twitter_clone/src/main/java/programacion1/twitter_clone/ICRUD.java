@@ -15,7 +15,7 @@ public interface ICRUD {
     public void connect();
     public void disconnect();
     public void disconnect_log();
-    public void getData();
+    public void getData(String Username);
     public void getLogData();
     public boolean active();
 }

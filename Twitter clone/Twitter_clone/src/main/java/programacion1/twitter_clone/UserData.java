@@ -165,13 +165,13 @@ public class UserData implements ICRUD {
     }
     
     @Override
-    public void getData(){
+    public void getData(String Username){
         try{
             Class.forName("com.mysql.jdbc.Driver");
         
             Connection con2 = DriverManager.getConnection("jdbc:mysql://localhost:3306/users", "root", "root");
-            PreparedStatement coman2 = con2.prepareStatement("select * from userlog order by Username desc limit 1;");
-            
+            PreparedStatement coman2 = con2.prepareStatement("select * from userlog where Username = ? order by Username desc limit 1;");
+            coman2.setString(1, Username);
             ResultSet rs = coman2.executeQuery();
             
             if(rs.next()){

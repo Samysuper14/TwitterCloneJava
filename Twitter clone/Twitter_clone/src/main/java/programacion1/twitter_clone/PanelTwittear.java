@@ -4,17 +4,25 @@
  */
 package programacion1.twitter_clone;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 /**
  *
  * @author Samuuel Kono Peralta
  */
 public class PanelTwittear extends javax.swing.JPanel {
-
+    String Username = "";
+    int UID = 0;
     /**
      * Creates new form PanelTwittear
      */
-    public PanelTwittear() {
+    public PanelTwittear(String Username) {
+        this.Username = Username;
         initComponents();
+        this.Userlabel.setText(this.Username);
     }
 
     /**
@@ -38,6 +46,11 @@ public class PanelTwittear extends javax.swing.JPanel {
         jScrollPane1.setViewportView(TwittearBody);
 
         SendBtn.setText("Send");
+        SendBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SendBtnMouseClicked(evt);
+            }
+        });
         SendBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SendBtnActionPerformed(evt);
@@ -75,6 +88,34 @@ public class PanelTwittear extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_SendBtnActionPerformed
 
+    private void SendBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SendBtnMouseClicked
+        // TODO add your handling code here:
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            
+            Connection con2 = DriverManager.getConnection("jdbc:mysql://localhost:3306/users", "root", "root");
+            PreparedStatement coman2 = con2.prepareStatement("SELECT * FROM users WHERE Username = ?");
+            
+            coman2.setString(1, this.Username);
+            ResultSet rs = coman2.executeQuery();
+            if(rs.next()){
+                this.UID = rs.getInt("UserID");
+            }
+            
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/users", "root", "root");
+            PreparedStatement comando = con.prepareStatement("INSERT INTO twits (Username, UserID, TwitBody, Likes, Dislikes) VALUES (?, ?, ?, 0, 0);");
+            
+            comando.setString(1, this.Username);
+            comando.setInt(2, this.UID);
+            comando.setString(3, this.TwittearBody.getText());
+            comando.executeUpdate();
+            this.TwittearBody.setText("");
+            
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_SendBtnMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton SendBtn;
@@ -82,4 +123,7 @@ public class PanelTwittear extends javax.swing.JPanel {
     private javax.swing.JLabel Userlabel;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    
 }
+

@@ -30,15 +30,20 @@ import java.awt.Color;
 public class Main_Window_Twitt extends javax.swing.JFrame {
 
     JPanel panel;
+    public String Username = "";
 
     /**
      * Creates new form Main_Window_Twitt
      */
-    public Main_Window_Twitt() throws SQLException {
+    public Main_Window_Twitt(String Username) throws SQLException {
         initComponents();
         setLayout(new BorderLayout());
-        initComponents();
+        
+        this.Username = Username;
+        
         addMainPanel();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
         addTwitPanels();
     }
 
@@ -55,6 +60,8 @@ public class Main_Window_Twitt extends javax.swing.JFrame {
         while (r.next()) {
             PanelTwitt pt = new PanelTwitt();
             pt.setTwitBodyTxt(r.getString("TwitBody"));
+            pt.setTwitLikes(((Number) r.getObject("Likes")).intValue(), ((Number) r.getObject("Dislikes")).intValue());
+            pt.setUser(r.getString("Username"));
             this.panel.add(pt);
             this.panel.revalidate();
             validate();
@@ -66,13 +73,15 @@ public class Main_Window_Twitt extends javax.swing.JFrame {
         this.panel.setLayout(new FlowLayout());
         this.panel.setBackground(Color.white);
         add(panel, BorderLayout.CENTER);
-        this.panel.add(new PanelTwittear());
+        this.panel.add(new PanelTwittear(this.Username));
         this.panel.revalidate();
         validate();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
+        RefreshBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -81,15 +90,31 @@ public class Main_Window_Twitt extends javax.swing.JFrame {
             }
         });
 
+        RefreshBtn.setText("Refresh");
+        RefreshBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                RefreshBtnMouseClicked(evt);
+            }
+        });
+        RefreshBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RefreshBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1224, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(RefreshBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 1091, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 678, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(RefreshBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 607, Short.MAX_VALUE))
         );
 
         pack();
@@ -98,10 +123,27 @@ public class Main_Window_Twitt extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
         UserData user = new UserData();
-        user.getData();
+        user.getData(this.Username);
         user.disconnect_log();
         this.dispose();
     }//GEN-LAST:event_formWindowClosing
+
+    private void RefreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RefreshBtnActionPerformed
+
+    private void RefreshBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RefreshBtnMouseClicked
+        // TODO add your handling code here:
+        try{
+            this.panel.removeAll();
+            this.panel.revalidate();
+            validate();
+            addMainPanel();
+            addTwitPanels();
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_RefreshBtnMouseClicked
 
     /**
      * @param args the command line arguments
@@ -144,5 +186,6 @@ public class Main_Window_Twitt extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton RefreshBtn;
     // End of variables declaration//GEN-END:variables
 }

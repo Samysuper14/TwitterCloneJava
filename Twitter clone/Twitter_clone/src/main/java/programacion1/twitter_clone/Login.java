@@ -143,12 +143,12 @@ public class Login extends javax.swing.JFrame {
         UserData user = new UserData();
         user.Username = UserTxtField.getText();
         user.Password = String.valueOf(PasswordTxtField.getPassword());
-        user.getData();
+        user.getData(user.Username);
         if (user.verify() && !user.active()){
             MessageLabel.setText("Welcome " + user.Username);
             user.connect();
             try{
-                new Main_Window_Twitt().setVisible(true);
+                new Main_Window_Twitt(user.Username).setVisible(true);
             }catch (SQLException ex){
                 ex.printStackTrace();
             }

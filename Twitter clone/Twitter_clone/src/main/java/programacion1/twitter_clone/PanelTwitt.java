@@ -9,12 +9,16 @@ package programacion1.twitter_clone;
  * @author Samuuel Kono Peralta
  */
 public class PanelTwitt extends javax.swing.JPanel {
+    public int Likes = 0;
+    public int Dislikes = 0;
+    
 
     /**
      * Creates new form PanelTwitt
      */
     public PanelTwitt() {
         initComponents();
+        
     }
 
     /**
@@ -33,6 +37,8 @@ public class PanelTwitt extends javax.swing.JPanel {
         DislikeButton = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         TwitBodyTxt = new javax.swing.JTextPane();
+        LikeLabel = new javax.swing.JLabel();
+        DislikeLabel = new javax.swing.JLabel();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -41,10 +47,19 @@ public class PanelTwitt extends javax.swing.JPanel {
         UserLabel.setText("Username");
 
         LikeButton.setText("Like");
+        LikeButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                LikeButtonMouseClicked(evt);
+            }
+        });
 
         DislikeButton.setText("Dislike");
 
         jScrollPane3.setViewportView(TwitBodyTxt);
+
+        LikeLabel.setText("0");
+
+        DislikeLabel.setText("0");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -56,11 +71,17 @@ public class PanelTwitt extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(16, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(LikeButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(DislikeButton))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                        .addComponent(LikeLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(DislikeButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(DislikeLabel)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -72,22 +93,43 @@ public class PanelTwitt extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LikeButton)
-                    .addComponent(DislikeButton))
+                    .addComponent(DislikeButton)
+                    .addComponent(LikeLabel)
+                    .addComponent(DislikeLabel))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void LikeButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LikeButtonMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_LikeButtonMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton DislikeButton;
+    private javax.swing.JLabel DislikeLabel;
     private javax.swing.JButton LikeButton;
+    private javax.swing.JLabel LikeLabel;
     private javax.swing.JTextPane TwitBodyTxt;
     private javax.swing.JLabel UserLabel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
-public void setTwitBodyTxt(String texto){
+    public void setTwitBodyTxt(String texto){
         this.TwitBodyTxt.setText(texto);
     }
+    
+    public void setTwitLikes(int likes, int dislikes){
+        this.LikeLabel.setText(Integer.toString(likes));
+        this.Likes = likes;
+        this.DislikeLabel.setText(Integer.toString(dislikes));
+        this.Dislikes = dislikes;
+    }
+    
+    public void setUser(String User){
+        this.UserLabel.setText(User);
+    }
+
 }
